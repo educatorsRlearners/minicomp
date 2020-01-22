@@ -1,0 +1,2 @@
+# minicomp
+DSR Rossman Challenge 
