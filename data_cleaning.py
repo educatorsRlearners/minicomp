@@ -18,3 +18,6 @@ df_train.loc[:, 'Date'] = pd.to_datetime(df_train.loc[:, 'Date'])
 
 #Convert the DayOfWeek column to Monday(0) - Sunday(6) and replace missing values 
 df_train.loc[:, 'DayOfWeek'] = df_train.loc[:, 'Date'].dt.dayofweek
+
+#Create a numpy ns64 column
+df_train["timestamp"] = df_train.Date.values.astype(np.int64)
