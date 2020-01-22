@@ -11,3 +11,7 @@ df_train = df_train.dropna(subset=['Store'])
 
 #Convert the store numbers from float to int
 df_train.loc[:, 'Store'] = df_train.loc[:, 'Store'].astype(int)
+
+#define a function
+store = pd.read_csv("../minicomp-rossman/data/store.csv")
+store.loc[store_n['CompetitionOpenSinceYear'].isna(),'CompetitionOpenSinceYear'] = store['Promo2SinceYear']
