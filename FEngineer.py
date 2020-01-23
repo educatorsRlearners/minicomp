@@ -2,7 +2,7 @@
 # requires JOINed Store and Train data 
 
 ## DO ONE HOT ENCODING AT THE END 
-
+import pandas as pd
 
 def FEngineer(df):
   
