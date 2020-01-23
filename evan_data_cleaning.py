@@ -29,6 +29,9 @@ def clean_train(train):
     train = train[(train["Sales"].notna()) | (train["Customers"].notna())]
     #Merge the tables
     master = train.merge(df, left_on="Store", right_on="Store")
+    #Impute missing values
+    master.CompetitionOpenSinceYear = master.CompetitionOpenSinceYear.fillna(2013)
+    master.CompetitionOpenSinceMonth = master.CompetitionOpenSinceMonth.fillna(9)
 
     return train
 
