@@ -12,7 +12,7 @@ def compdist(df):
     df.CompetitionDistance = df.CompetitionDistance.fillna(250) 
     return df 
 
-def clean_train(train):
+def clean_train(train, df):
     '''Clean the data from the train set'''
     #Drop the rows where we do not have a store number
     #train = pd.read_csv("../minicomp-rossman/data/train.csv")
