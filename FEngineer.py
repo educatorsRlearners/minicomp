@@ -53,12 +53,26 @@ def FEngineer(df):
         # but maybe we need to bin it 
     
     # 5. Some stores are open on holidays 
-    # df["holiday_stores"] = []
+    df["holiday_stores"] = 0
     df.loc[(df['StateHoliday']==1) & (df['Sales'] > 0), "holiday_stores"] = 1
     # which stores are open? df[df["holiday_stores"] == 1]["Store"].unique()
     
-    # 6. Encode stores by their average 
-    qwe = df.groupby("Store")["Sales"].mean()
+    # 7. Sale per customer
+    df["SalesPerCustomer"]  = df["Sales"]/df["Customers"]
     
+    # 8. Encoding 
+    c_for_onehot = ['StateHoliday', 'Promo', 'PromoInterval','StoreType']
+    one_hot = pd.get_dummies(df[c_for_onehot])
+    out = pd.concat([df, one_hot],axis = 1)
+    
+    # Encode stores by their average 
+    out["MeanPerStore"] = df.groupby(['Store'])['Sales'].transform('mean')
+    
+    # dropc_for_onehot
+    
+    out= out.drop('StateHoliday', axis='columns')
+    out= out.drop('Promo', axis='columns')
+    out= out.drop('PromoInterval', axis='columns')
+    out= out.drop('StoreType', axis='columns')
     
     return(df)
