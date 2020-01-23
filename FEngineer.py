@@ -2,7 +2,7 @@
 # requires JOINed Store and Train data 
 
 ## DO ONE HOT ENCODING AT THE END 
-
+import pandas as pd
 
 def FEngineer(df):
   
@@ -53,7 +53,7 @@ def FEngineer(df):
         # but maybe we need to bin it 
     
     # 5. Some stores are open on holidays 
-    # df["holiday_stores"] = []
+    df["holiday_stores"] = 0
     df.loc[(df['StateHoliday']==1) & (df['Sales'] > 0), "holiday_stores"] = 1
     # which stores are open? df[df["holiday_stores"] == 1]["Store"].unique()
     
