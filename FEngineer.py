@@ -58,7 +58,10 @@ def FEngineer(df):
     # which stores are open? df[df["holiday_stores"] == 1]["Store"].unique()
     
     # 7. Sale per customer
-    df["SalesPerCustomer"]  = df["Sales"]/df["Customers"]
+    #df["SalesPerCustomer"]  = df["Sales"]/df["Customers"]
+    spc = df["Sales"]/df["Customers"]
+    spc[df["Open"] == 0] = 0
+    df["SalesPerCustomer"] = spc
     
     # 8. Encoding 
     c_for_onehot = ['StateHoliday', 'Promo', 'PromoInterval','StoreType']
