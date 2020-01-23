@@ -2,14 +2,17 @@ import pandas as pd
 import numpy as np
 
 def clean_store(df):
-    #Assortment - describes an assortment level: a = basic, b = extra, c = extended
     df['Assortment'] = df['Assortment'].replace({"a": 1, "b": 2, "c": 3})
     #Fill missing values from CopetitionDistance with the Mode
     df.CompetitionDistance = df.CompetitionDistance.fillna(250)
     #Impute missing values
     df.CompetitionOpenSinceYear = df.CompetitionOpenSinceYear.fillna(2013)
     df.CompetitionOpenSinceMonth = df.CompetitionOpenSinceMonth.fillna(9)
+    #Convert to integers
+    df[['CompetitionOpenSinceMonth','CompetitionOpenSinceYear']] = df[['CompetitionOpenSinceMonth','CompetitionOpenSinceYear']] .astype(int)
     return df
+
+clean_store(df)
 
 def clean_train(train):
     '''Clean the data from the train set'''
