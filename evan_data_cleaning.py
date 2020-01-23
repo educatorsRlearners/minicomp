@@ -33,5 +33,5 @@ def clean_train(train, df):
     master.CompetitionOpenSinceYear = master.CompetitionOpenSinceYear.fillna(2013)
     master.CompetitionOpenSinceMonth = master.CompetitionOpenSinceMonth.fillna(9)
 
-    return train
+    return master
 
