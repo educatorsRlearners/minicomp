@@ -12,7 +12,7 @@ def clean_store(df):
     df[['CompetitionOpenSinceMonth','CompetitionOpenSinceYear']] = df[['CompetitionOpenSinceMonth','CompetitionOpenSinceYear']] .astype(int)
     return df
 
-clean_store(df)
+#clean_store(df)
 
 def clean_train(train):
     '''Clean the data from the train set'''
