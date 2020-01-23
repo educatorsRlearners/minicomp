@@ -12,8 +12,6 @@ def clean_store(df):
     df[['CompetitionOpenSinceMonth','CompetitionOpenSinceYear']] = df[['CompetitionOpenSinceMonth','CompetitionOpenSinceYear']] .astype(int)
     return df
 
-#clean_store(df)
-
 def clean_train(train):
     '''Clean the data from the train set'''
     #Drop the rows where we do not have a store number
@@ -30,6 +28,51 @@ def clean_train(train):
     #Remove rows where we do not have a vale for sales or customers
     train = train[(train["Sales"].notna()) | (train["Customers"].notna())]
     return train
+
+def customer_fill(train):
+    null_mask = train.loc[:, 'Customers'].isnull()
+    sub = train.loc[null_mask, :]
+    sales_by = train.groupby(["Store","DayOfWeek"]).mean().reset_index()
+
+    fill = []
+    for row in range(sub.shape[0]):
+
+        store = sub.iloc[row, :].loc['Store']
+        day = sub.iloc[row, :].loc['DayOfWeek']
+
+        mask = sales_by['Store'] == store
+        store_only = sales_by.loc[mask, :]
+
+        mask = store_only['DayOfWeek'] == day
+        store_day = store_only.loc[mask, 'Customers']
+        fill.append(store_day.values)
+
+    train.loc[null_mask, 'Customers'] = np.array(fill)
+    
+    return(train)
+
+def sales_fill(train):
+    '''Fill the sales columns which are null'''
+    null_mask = train.loc[:, 'Sales'].isnull()
+    sub = train.loc[null_mask, :]
+    sales_by = train.groupby(["Store","DayOfWeek"]).mean().reset_index()
+
+    fill = []
+    for row in range(sub.shape[0]):
+
+        store = sub.iloc[row, :].loc['Store']
+        day = sub.iloc[row, :].loc['DayOfWeek']
+
+        mask = sales_by['Store'] == store
+        store_only = sales_by.loc[mask, :]
+
+        mask = store_only['DayOfWeek'] == day
+        store_day = store_only.loc[mask, 'Sales']
+        fill.append(store_day.values)
+
+    train.loc[null_mask, 'Sales'] = np.array(fill)
+    
+    return(train)
 
 def store_train_merge(df, train):
     #Merge the tables
