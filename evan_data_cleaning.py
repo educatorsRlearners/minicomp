@@ -11,7 +11,7 @@ def clean_store(df):
     df.CompetitionOpenSinceMonth = df.CompetitionOpenSinceMonth.fillna(9)
     return df
 
-def clean_train(train, df):
+def clean_train(train):
     '''Clean the data from the train set'''
     #Drop the rows where we do not have a store number
     #train = pd.read_csv("../minicomp-rossman/data/train.csv")
@@ -26,9 +26,9 @@ def clean_train(train, df):
     train["timestamp"] = train.Date.values.astype(np.int64)
     #Remove rows where we do not have a vale for sales or customers
     train = train[(train["Sales"].notna()) | (train["Customers"].notna())]
+    return train
+
+def store_train_merge(df, train):
     #Merge the tables
     master = train.merge(df, left_on="Store", right_on="Store")
-    
-
     return master
-
