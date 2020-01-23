@@ -24,6 +24,8 @@ def clean_train(train):
     train["timestamp"] = train.Date.values.astype(np.int64)
     #Remove rows where we do not have a vale for sales or customers
     train = train[(train["Sales"].notna()) | (train["Customers"].notna())]
+    #Merge the tables
+    master = train.merge(df, left_on="Store", right_on="Store")
 
     return train
 
