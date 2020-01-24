@@ -3,6 +3,7 @@
 
 ## DO ONE HOT ENCODING AT THE END 
 import pandas as pd
+import numpy as np
 
 def FEngineer(df):
   
@@ -117,5 +118,13 @@ def FEngineer(df):
     out.loc[out['Competition_running_help2']<out['Date'],'Competition_running'] = 1
     out.loc[(out['CompetitionOpenSinceMonth'].isna())&(out['CompetitionOpenSinceYear'].isna()),'Competition_running'] = 0
     out = out.drop(['Competition_running_help','Competition_running_help2'],axis=1)
+    
+    out = out.drop(['Date','timestamp'],axis = 1)
+    out = out.dropna()
+    out = out.replace([np.inf, -np.inf], np.nan).dropna()
+    out = out.astype(np.float32)
+    
+    #drop features that lack importance due to feature_importance below
+    out = out.drop(['Open','SchoolHoliday','Promo2','Afer_hols','After_promo','holiday_stores'],axis = 1)
     
     return(out)

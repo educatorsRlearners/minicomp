@@ -1,4 +1,4 @@
-pip install -r requirements_prev.txt
+pip install -r requirements_final.txt
 #sudo apt-get update
 cd $HOME
 git clone https://github.com/ADGEfficiency/minicomp-rossman

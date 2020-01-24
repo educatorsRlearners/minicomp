@@ -5,6 +5,8 @@ import xgboost as xgb
 
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import os
 
 def split_train_valid(train_clean):
     #insert dataframe
@@ -54,7 +56,37 @@ def xgboost(X_train, X_test, y_train, y_test, n_estimators,max_depth, max_featur
 
     
     
-  
+def plot_feature_importances(rf, cols, model_dir):
+    importances = pd.DataFrame()
+    importances.loc[:, 'importances'] = rf.feature_importances_
+    importances.loc[:, 'features'] = cols
+    importances.sort_values('importances', inplace=True)
+    f, a = plt.subplots()
+    importances.plot(ax=a, kind='bar', x='features', y='importances')
+    plt.gcf().subplots_adjust(bottom=0.3)
+    f.savefig(os.path.join(model_dir, 'importances.png'))
+    
+#from sklearn.ensemble import RandomForestRegressor
+#import xgboost as xgb
+#from sklearn.model_selection import GridSearchCV
+#from sklearn.metrics.scorer import make_scorer
+#rf = RandomForestRegressor(n_jobs = -1)
+#xb = xgb.XGBRegressor(n_jobs = -1)
+
+#n_estimators = [10, 50]#, 100, 150]
+#max_depth = [10, 50]# ,100, 150]
+#max_features = [10,20,29]
+#min_samples_leaf = [1,3,5]
+
+#my_scorer = make_scorer(rfm.rmse, greater_is_better=False)
+"""
+grid = GridSearchCV(estimator=rf, cv=3, scoring = my_scorer,
+                    param_grid=dict(n_estimators=n_estimators, max_depth=max_depth, 
+                                      max_features=max_features,min_samples_leaf=min_samples_leaf))
+"""
+#grid.fit(X_train.values, y_train.values)
+#print (grid.best_score_)
+#print (grid.best_params_)
     
 
 
