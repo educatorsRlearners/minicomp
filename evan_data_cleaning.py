@@ -17,6 +17,8 @@ def clean_train(train):
     #Drop the rows where we do not have a store number
     #train = pd.read_csv("../minicomp-rossman/data/train.csv")
     train = train.dropna(subset=['Store'])
+    #drop sales = 0
+    train = train.loc[(train['Sales']!=0)]
     #Convert the store numbers from float to int
     train.loc[:, 'Store'] = train.loc[:, 'Store'].astype(int)
     #Convert the date colume to datetime
@@ -48,12 +50,14 @@ def customer_fill(train):
         fill.append(store_day.values)
 
     train.loc[null_mask, 'Customers'] = np.array(fill)
+    train['Customers'] = train['Customers'].astype(int)
     
     return(train)
 
 def sales_fill(train):
     '''Fill the sales columns which are null'''
     null_mask = train.loc[:, 'Sales'].isnull()
+    
     sub = train.loc[null_mask, :]
     sales_by = train.groupby(["Store","DayOfWeek"]).mean().reset_index()
 
@@ -71,10 +75,12 @@ def sales_fill(train):
         fill.append(store_day.values)
 
     train.loc[null_mask, 'Sales'] = np.array(fill)
+    train['Sales'] = train['Sales'].astype(int)
     
     return(train)
 
 def store_train_merge(df, train):
     #Merge the tables
     master = train.merge(df, left_on="Store", right_on="Store")
+    
     return master
