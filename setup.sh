@@ -1,4 +1,5 @@
-sudo apt-get update
+pip install -r requirements_prev.txt
+#sudo apt-get update
 cd $HOME
 git clone https://github.com/ADGEfficiency/minicomp-rossman
 #kaggle competitions download -c data-science-bowl-2019
