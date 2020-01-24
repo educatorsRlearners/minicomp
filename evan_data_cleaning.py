@@ -9,6 +9,7 @@ def clean_store(df):
     df.CompetitionOpenSinceYear = df.CompetitionOpenSinceYear.fillna(2013)
     df.CompetitionOpenSinceMonth = df.CompetitionOpenSinceMonth.fillna(9)
     #Convert to integers
+    
     df[['CompetitionOpenSinceMonth','CompetitionOpenSinceYear']] = df[['CompetitionOpenSinceMonth','CompetitionOpenSinceYear']] .astype(int)
     return df
 
@@ -16,6 +17,7 @@ def clean_train(train):
     '''Clean the data from the train set'''
     #Drop the rows where we do not have a store number
     #train = pd.read_csv("../minicomp-rossman/data/train.csv")
+    train.loc[train['StateHoliday']==0,'StateHoliday'] = '0'
     train = train.dropna(subset=['Store'])
     #drop sales = 0
     train = train.loc[(train['Sales']!=0)]
@@ -50,7 +52,7 @@ def customer_fill(train):
         fill.append(store_day.values)
 
     train.loc[null_mask, 'Customers'] = np.array(fill)
-    train['Customers'] = train['Customers'].astype(int)
+    #train['Customers'] = train['Customers'].astype(int)
     
     return(train)
 
@@ -75,9 +77,22 @@ def sales_fill(train):
         fill.append(store_day.values)
 
     train.loc[null_mask, 'Sales'] = np.array(fill)
-    train['Sales'] = train['Sales'].astype(int)
+    #train['Sales'] = train['Sales'].astype(int)
+    
+    
     
     return(train)
+
+def fill_fast(train_,col):
+    #train_['test_h'] = 0
+    train_['test_h'] = train_.groupby(['Store', 'DayOfWeek'])['Sales'].transform('mean')
+
+    train_.loc[train_['Sales'].isna(),col] = train_['test_h']
+    train_ = train_.dropna(subset=[col])
+    train_ = train_.drop('test_h', axis = 1)
+    return train_
+
+
 
 def store_train_merge(df, train):
     #Merge the tables
